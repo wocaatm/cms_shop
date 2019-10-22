@@ -1,0 +1,191 @@
+body{
+    font-family:"微软雅黑";
+    font-size: 12px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    color:#333;
+}
+
+article {
+    display: block;
+}
+
+input,textarea,select{
+    font-size:12px;
+    font-size:100%;
+    font-family:arial;
+    font-family:inherit;
+}
+body,h1,h2,h3,h4,h5,h6,p,ul,ol,form,dl,dd,dt{
+    margin:0;
+}
+
+ul,ol{
+    padding-left:0;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+a.block {
+    display: block;
+}
+
+.fl{
+    float:left;
+}
+
+.fr{
+    float:right;
+}
+
+.clearfix:after{
+    content: '';
+    display: table;
+    clear:both;
+}
+
+img{
+    max-width: 100%;
+    border:none;
+    display: block;
+}
+
+img.inline{
+    display: inline-block;
+}
+
+input,select,textarea {
+    border:none;
+    outline: none;
+}
+
+.single-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.pointer {
+    cursor:pointer;
+}
+
+/*checkbox css start*/
+label.checkbox-container {
+    display: inline-block;
+    height:20px;
+    line-height: normal;
+    font-size: 12px;
+}
+
+label.checkbox-container .checkbox-core {
+    display: inline-block;
+    background-color: #fff;
+    border-radius: 100%;
+    border: 1px solid #ccc;
+    position: relative;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+}
+
+label.checkbox-container .checkbox-core {
+    display: inline-block;
+    background-color: #fff;
+    border-radius: 100%;
+    border: 1px solid #ccc;
+    position: relative;
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+}
+
+label.checkbox-container .checkbox-core:after {
+    content: "";
+    position:absolute;
+    top:3px;
+    left:6px;
+    width:4px;
+    height:8px;
+    border:2px solid transparent;
+    border-left: 0;
+    border-top: 0;
+    -webkit-transform: rotate(45deg) scale(0);
+    transform: rotate(45deg) scale(0);
+    -webkit-transition: -webkit-transform .2s;
+    transition: -webkit-transform .2s;
+    transition: transform .2s;
+    transition: transform .2s,-webkit-transform .2s;
+}
+
+label.checkbox-container .checkbox-input.selected + .checkbox-core {
+    border-color: #11b111;
+    background-color: #11b111;
+}
+
+label.checkbox-container .checkbox-input.selected + .checkbox-core:after {
+    border-color:#fff;
+    -webkit-transform: rotate(45deg) scale(1);
+    transform: rotate(45deg) scale(1);
+}
+
+label.checkbox-container .checkbox-input:checked + .checkbox-core {
+    border-color: #11b111;
+    background-color: #11b111;
+}
+
+label.checkbox-container .checkbox-input:checked + .checkbox-core:after {
+    border-color:#fff;
+    -webkit-transform: rotate(45deg) scale(1);
+    transform: rotate(45deg) scale(1);
+}
+
+label.checkbox-container .checkbox-input {
+    display: none
+}
+
+
+/* radio 单选框样式 */
+label.radio-container .radio-input {
+    display: none;
+}
+
+label.radio-container .radio-core {
+    display: inline-block;
+    position: relative;
+    width: 20px;
+    height:20px;
+    border-radius: 100%;
+    box-sizing: border-box;
+    border:1px solid #ccc;
+    vertical-align: middle;
+}
+
+label.radio-container .radio-core:after {
+    content: "";
+    width:8px;
+    height:8px;
+    border-radius: 100%;
+    position: absolute;
+    top:5px;
+    left:5px;
+    background: #fff;
+    transition:transform 0.2s;
+    -webkit-transform: scale(0);
+    transform:scale(0);
+}
+
+label.radio-container .radio-input:checked + .radio-core {
+    background: #11b111;
+    border-color:#11b111;
+}
+
+label.radio-container .radio-input:checked + .radio-core:after {
+    -webkit-transform: scale(1);
+    transform:scale(1);
+}
