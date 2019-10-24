@@ -5,18 +5,37 @@
         </shop-header>
         <div class="detail-main-container" v-if="!loading">
             <div class="detail-info-container">
-                <div class="detail-info-thumb" v-if='detail.thumb'>
-                    <img class='detail-thumb' :src="detail.thumb.thumbUrl" alt="">
+                <div class="detail-info-thumb" v-if='detail.pic'>
+                    <img class='detail-thumb' :src="detail.pic" alt="">
                 </div>
                 <div class="detail-info-msg">
-                    <h3 class="info-msg-title">{{detail.title}}</h3>
-                    <div class="detail-row" v-for='(value, key) in detail.parameters'>
-                        <span class="detail-row-title">{{key}}：</span><span class="detail-row-content">{{value}}</span>
-                    </div>
-                    <div class="product-select-row" :key="index" v-for="(option, index) in detail.productOption">
-                      <span class="select-name">{{option.select}}：</span>
+                    <h3 class="info-msg-title">{{detail.name}}</h3>
+                    <div class="product-select-row">
+                      <span class="select-name">可用日期：</span>
                       <div class="select-option-container">
-                        <span class="option-item" @click="switchOption(tag.id, index)" v-for="tag in option.options" :key="tag.id" :class="{active: tag.id == productOptions[index]}">{{ tag.label }}</span>
+                        <span class="option-item" v-if="timeSet.includes(tag.id)" @click="switchOption(tag.id, 0)" :key="tag.id" v-for="(tag) in detail.skiing_time_label" :class="{active: tag.id == timeIndex}">{{ tag.name }}</span>
+                        <span class="option-item disabled" v-else>{{tag.name}}</span>
+                      </div>
+                    </div>
+                    <div class="product-select-row">
+                      <span class="select-name">雪板类型：</span>
+                      <div class="select-option-container">
+                        <span class="option-item" v-if="stateSet.includes(tag.id)" @click="switchOption(tag.id, 1)" :key="tag.id" v-for="(tag) in detail.skis_state_label" :class="{active: tag.id == stateIndex}">{{ tag.name }}</span>
+                        <span class="option-item disabled" v-else>{{tag.name}}</span>
+                      </div>
+                    </div>
+                    <div class="product-select-row">
+                      <span class="select-name">滑雪时长：</span>
+                      <div class="select-option-container">
+                        <span class="option-item" v-if="dateSet.includes(tag.id)" @click="switchOption(tag.id, 2)" :key="tag.id" v-for="(tag) in detail.use_dates_label" :class="{active: tag.id == dataIndex}">{{ tag.name }}</span>
+                        <span class="option-item disabled" v-else>{{tag.name}}</span>
+                      </div>
+                    </div>
+                    <div class="product-select-row">
+                      <span class="select-name">附加服务：</span>
+                      <div class="select-option-container">
+                        <span class="option-item" v-if="serviceSet.includes(tag.id)" @click="switchOption(tag.id, 3)" :key="tag.id" v-for="(tag) in detail.add_services_label" :class="{active: tag.id == serviceIndex}">{{ tag.name }}</span>
+                        <span class="option-item disabled" v-else>{{tag.name}}</span>
                       </div>
                     </div>
                     <div class="detail-row">
@@ -32,7 +51,7 @@
             </div>
             <h3 class="detail-content-title">产品内容</h3>
             <div class="wangEditor-container">
-                <div class="wangEditor-txt" v-html='detail.content'></div>
+                <div class="wangEditor-txt" v-html='detail.memo'></div>
             </div>
         </div>
         <div class="buy-product-info">
@@ -45,39 +64,47 @@
 <script>
     import { mapGetters } from 'vuex'
     import { isPositiveNum } from '../lib/util'
-    import { Toast } from 'mint-ui'
+    import { Toast, MessageBox } from 'mint-ui'
     import * as tips from '../lib/tips'
     import shopHeader from '../components/header'
+    import Api from '../api/index';
 
     export default {
         data () {
             return {
                 pid: '',
                 count: 1,
-                productOptions: [],
                 loading: true,
-                basePrice: 0
+                timeSet: [],
+                stateSet: [],
+                dateSet: [],
+                serviceSet: [],
+                timeIndex: '',
+                stateIndex: '',
+                dataIndex: '',
+                serviceIndex: ''
             }
         },
         computed: {
             ...mapGetters({
-                'detail': 'productDetail',
-                'userinfo': 'userCenterInfo'
+                'detail': 'productDetail'
             }),
-            extraPrice () {
-                let extra = 0
-                this.productOptions.forEach((item, index) => {
-                    const options = this.detail.productOption[index].options || []
-                    options.forEach(o => {
-                        if (o.id == item) {
-                            extra += +o.priceExtra
-                        }
-                    })
-                })
-                return extra
+            selectedProductId () {
+              const t = this;
+              return `${t.timeIndex}_${t.stateIndex}_${t.dataIndex}_${t.serviceIndex}`;
             },
             singleProductPrice () {
-                return this.basePrice + this.extraPrice
+              const t = this;
+              const list = t.detail.product_list;
+              let price = 0;
+
+              if (list) {
+                list.forEach(li => {
+                  if (li.label_view == t.selectedProductId) price = li.price
+                })
+              }
+
+              return price
             },
             allPrice () {
                 return this.singleProductPrice * this.count
@@ -102,14 +129,31 @@
                 this.count = target.value
             },
             switchOption (id, index) {
-                this.productOptions.splice(index, 1, id)
+              const setIndexArr = ['timeIndex', 'stateIndex', 'dataIndex', 'serviceIndex'];
+              this[setIndexArr[index]] = id;
             },
             buy () {
-                // 验证是否可以购买
-                this.$router.push({ path: '/pay', query: { orderId: 201908171013 } })
+              const t = this;
+              // 验证是否可以购买
+              Api.verifyCart({ productId: t.selectedProductId, count: t.count })
+                .then((response) => {
+                  if (response.data.success) {
+                    t.$router.push({ path: '/pay', query: { orderId: response.data.orderId } })
+                  } else {
+                    MessageBox.alert(response.data.errorMsg)
+                  }
+                })
             },
             goBack () {
                 this.$router.go(-1)
+            },
+            splitOptions (productId) {
+              const splitArr = productId.split('_');
+              const setArr = ['timeIndex', 'stateIndex', 'dataIndex', 'serviceIndex'];
+
+              setArr.forEach((k, i) => {
+                this[k] = splitArr[i];
+              })
             }
         },
         components: {
@@ -117,14 +161,58 @@
         },
         watch: {
             detail (to) {
-                let priceOptions = to && to.productOption
-                this.basePrice = +to.basePrice
-                if (Array.isArray(priceOptions) && priceOptions.length) {
-                    this.productOptions = priceOptions.map((o) => {
-                        return o.options[0].id
-                    })
+              const t = this;
+              const list = to.product_list;
+              const timeSet = t['timeSet'];
+
+              list.forEach(li => {
+                const [ time ] = li.label_view.split('_');
+
+                if (!timeSet.includes(+time)) timeSet.push(+time);
+              });
+
+              t.timeIndex = timeSet[0];
+
+              this.loading = false
+            },
+            timeIndex (to) {
+              const t = this;
+              const list = t.detail.product_list;
+              const setArr = ['timeSet', 'stateSet', 'dateSet', 'serviceSet'];
+              let canSelectP = [];
+              let firstItem = ''
+
+              list.forEach(li => {
+                if (li.label_view.startsWith(to)) {
+                  if (!firstItem) firstItem = li.label_view
+                  canSelectP.push(li);
                 }
-                this.loading = false
+              });
+
+              // 切换第一个维度的时候初始化其他维度
+              setArr.forEach((item, index) => {
+                if (index > 0) {
+                  t[item] = [];
+                }
+              })
+
+              // 切割展示满足条件的第一个选项
+              t.splitOptions(firstItem);
+
+              // 根据选择的第一项去重新生成可选的set
+              canSelectP.forEach(li => {
+                const view = li.label_view.split('_');
+
+                view.forEach((o, index) => {
+                  // 只对应更新除了timeSet的集合
+                  if (index > 0) {
+                    let set = t[setArr[index]];
+                    if (!set.includes(+o)) {
+                      set.push(+o)
+                    }
+                  }
+                })
+              });
             }
         }
     }
@@ -207,6 +295,9 @@
                       &.active
                         background #11b111
                         color #fff
+                      &.disabled
+                        border-color #ccc
+                        color: #ccc
             .detail-content-title
                 margin-top 10px
                 padding-left 15px

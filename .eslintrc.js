@@ -23,10 +23,9 @@ module.exports = {
     'generator-star-spacing': 0,
     'eqeqeq': 0,
     'semi': 0,
+    'indent': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-
-    "indent": ["error", 4, { "SwitchCase": 1 }],
 
     "eol-last": 0,
 

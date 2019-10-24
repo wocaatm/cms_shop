@@ -156,8 +156,6 @@
             background #fff
             border-radius 6px
             overflow hidden
-            .info-thumb-container
-              height 198px
             .info-title-price-part
               display flex
               justify-content space-between
