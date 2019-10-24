@@ -2,9 +2,9 @@
     <div class="user-center-container">
         <div class='user-info-container clearfix'>
             <div class="info-thumb-container fl">
-                <img class='thumb' :src="info.thumb">
+                <img class='thumb' :src="info.portrait">
             </div>
-            <div class="info-username fl">{{info.username}}</div>
+            <div class="info-username fl">{{info.wechaname}}</div>
         </div>
         <div class="user-order-container">
             <div class="order-header">
@@ -62,6 +62,9 @@
                 'info': 'userCenterInfo'
             })
         },
+        created () {
+          console.log(this.info);
+        },
         components: {
             shopFooter
         }
@@ -88,6 +91,7 @@
                 height 60px
                 border-radius 4px
                 overflow hidden
+                border 1px solid #eee
                 .thumb
                     width 100%
                     height 100%

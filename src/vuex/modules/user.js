@@ -2,7 +2,17 @@ import { INIT_LOGING_USER, USER_LOGOUT_ACTION } from '../types'
 import * as cookie from '../../lib/cookie'
 
 function getSkiTag () {
-    return cookie.hasCookie('skiId') ? 'userinfo_' + cookie.getCookie('skiId') : false
+  if (cookie.hasCookie('userInfo')) {
+    // 去掉think:
+    const userInfo = JSON.parse(decodeURIComponent(cookie.getCookie('userInfo')).substr(6));
+    
+    return {
+      ...userInfo,
+      portrait: decodeURIComponent(userInfo.portrait)
+    }
+  } else {
+    return false
+  }
 }
 function getUserFromCookie () {
     var tag = getSkiTag()
@@ -14,7 +24,7 @@ function getUserFromCookie () {
 }
 
 const state = {
-    userinfo: getUserFromCookie() || ''
+    userinfo: getSkiTag() || ''
 }
 
 const mutations = {
