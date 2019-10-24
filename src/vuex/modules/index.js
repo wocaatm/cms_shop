@@ -2,14 +2,20 @@ import { INIT_SWIPE, INIT_CATEGORY} from '../types'
 
 const state = {
     swipe: [],
-    category: []
+    category: [],
+    sceneInfo: ''
 }
 
 const mutations = {
     [INIT_SWIPE] (state, swipe) {
-        if (swipe.hasSwipe) {
-            state.swipe = swipe.swipeData
-        }
+      const result = swipe.data;
+      const { name, tel, address, swipeData } = result
+      state.swipe = swipeData;
+      state.sceneInfo = {
+        name,
+        tel,
+        address
+      }
     },
     [INIT_CATEGORY] (state, category) {
         state.category = category

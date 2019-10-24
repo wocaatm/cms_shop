@@ -5,21 +5,16 @@
             <p class="no-product-tips">目前还没有商品~</p>
         </div>
         <ul class="product-list-container"
-            v-infinite-scroll="loadMore"
-            infinite-scroll-disabled="loading"
-            infinite-scroll-distance="10"
-            infinite-scroll-immediate-check="false"
             v-else
         >
             <li class="product-item" v-for='(product, index) in products' :key="index">
                 <router-link class='product-info-container' :to="{path: '/detail', query: {pid: product.id}}">
                     <div class="info-thumb-container">
-                      <img :src="product.thumb" alt="" class="info-thumb">
+                      <img :src="product.pic" alt="" class="info-thumb">
                     </div>
                     <div style="margin: 0 9px;">
                       <div class="info-title-price-part">
-                        <span class="title-part">{{ product.title }}</span>
-                        <span class="price-part">￥{{ product.price }}</span>
+                        <span class="title-part">{{ product.name }}</span>
                       </div>
                       <div class="info-description single-ellipsis">{{ product.description }}</div>
                     </div>
@@ -28,7 +23,7 @@
             <div class="loading-more-container" v-if='loading'>
                 <mt-spinner type="fading-circle" color='#000' :size='24'></mt-spinner><span class="loading-tips">正在加载中...</span>
             </div>
-            <div class="loaded-all" v-if='!hasMore && onceLoadMore'>
+            <div class="loaded-all">
                 <span>已加载全部数据...</span>
             </div>
         </ul>
@@ -37,9 +32,6 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { assignObj } from '../lib/util'
-    import '../assets/js/jquery'
-    import '../assets/js/fly'
 
     export default {
         data () {
@@ -47,7 +39,6 @@
                 limit: 10,
                 loading: false,
                 type: '',
-                onceLoadMore: false,
                 loaded: false
             }
         },
@@ -59,18 +50,11 @@
                     type: this.type || ''
                 }
             },
-            cartIds () {
-                return this.shopCart.map(function (item) {
-                    return item.id
-                })
-            },
             offset () {
                 return this.products.length
             },
             ...mapGetters({
                 'products': 'getProductList',
-                'hasMore': 'hasMoreProduct',
-                'shopCart': 'shopCart',
                 'userinfo': 'userCenterInfo'
             })
         },
@@ -81,65 +65,10 @@
         methods: {
             initData () {
                 this.query.offset = 0
-                this.$store.dispatch('initProductList', this.query)
+                this.$store.dispatch('initProductList')
                     .then(() => {
                         this.loaded = true
                     })
-            },
-            loadMore () {
-                if (!this.hasMore) return
-                if (!this.onceLoadMore) this.onceLoadMore = true
-                this.loading = true
-                this.$store.dispatch('loadMoreProduct', this.query)
-                    .then(() => {
-                        this.loading = false
-                    })
-            },
-            getCartCount (value) {
-                return this.shopCart[value].count
-            },
-            switchCart (e) {
-                if (!this.userinfo) {
-                    this.$router.push('/login')
-                    return
-                }
-                var target = e.target
-                if (target.classList.contains('opration-icon')) target = target.parentNode
-                var product = this.products[+target.getAttribute('data-index')]
-                var count = +target.getAttribute('data-switch')
-                var data = {
-                    id: '',
-                    title: '',
-                    description: '',
-                    thumb: '',
-                    price: '',
-                    count: +target.getAttribute('data-switch')
-                }
-                var result = assignObj(data, product)
-                this.$store.dispatch('switchShopCart', result)
-                    .then(() => {
-                        if (count === 1) {
-                            this.addAnimation(e, target)
-                        }
-                    })
-            },
-            addAnimation (e, target) {
-                var flyer = window.$("<img class='cart-add-animation'/>").attr('src', target.getAttribute('data-thumb'))
-                flyer.fly({
-                    start: {
-                        left: e.pageX,
-                        top: (e.pageY - window.$('body').scrollTop())
-                    },
-                    end: {
-                        left: 3 * window.innerWidth / 4 - 30,
-                        top: window.innerHeight - 40,
-                        width: 0,
-                        height: 0
-                    },
-                    onEnd: function () {
-                        this.destory()
-                    }
-                })
             }
         }
     }
@@ -147,7 +76,7 @@
 
 <style lang="stylus">
     .product-list-container
-        margin-top 10px
+        margin 10px 0
         background #eee
         .product-item
             position relative
@@ -156,7 +85,10 @@
             background #fff
             border-radius 6px
             overflow hidden
-            .info-title-price-part
+            .info-thumb
+              width 100%
+              height 180px
+          .info-title-price-part
               display flex
               justify-content space-between
               margin 9px 0 4px

@@ -8,33 +8,49 @@
                 <div class="detail-info-thumb" v-if='detail.pic'>
                     <img class='detail-thumb' :src="detail.pic" alt="">
                 </div>
+                <h3 class="detail-content-title" style="margin: 6px -10px 0" v-if="sceneInfo">商家信息</h3>
+                <div class="shop-info-container">
+                  <div class="product-select-row">
+                    <span class="select-name">景区名称：</span>
+                    <span style="font-size: 14px;">{{ sceneInfo.name }}</span>
+                  </div>
+                  <div class="product-select-row">
+                    <span class="select-name">景区地址：</span>
+                    <span style="font-size: 14px;">{{ sceneInfo.address }}</span>
+                  </div>
+                  <div class="product-select-row">
+                    <span class="select-name">景区电话：</span>
+                    <a :href="`tel:${sceneInfo.tel}`" style="font-size: 14px;">{{ sceneInfo.tel }}</a>
+                  </div>
+                </div>
+                <h3 class="detail-content-title" style="margin: 6px -10px 0">产品参数</h3>
                 <div class="detail-info-msg">
                     <h3 class="info-msg-title">{{detail.name}}</h3>
                     <div class="product-select-row">
                       <span class="select-name">可用日期：</span>
                       <div class="select-option-container">
-                        <span class="option-item" v-if="timeSet.includes(tag.id)" @click="switchOption(tag.id, 0)" :key="tag.id" v-for="(tag) in detail.skiing_time_label" :class="{active: tag.id == timeIndex}">{{ tag.name }}</span>
+                        <span class="option-item" v-if="dateSet.includes(tag.id)" @click="changeDisabledOption(0, tag.id)" :key="tag.id" v-for="(tag) in detail.use_dates_label" :class="{active: tag.id == dataIndex}">{{ tag.name }}</span>
                         <span class="option-item disabled" v-else>{{tag.name}}</span>
                       </div>
                     </div>
                     <div class="product-select-row">
                       <span class="select-name">雪板类型：</span>
                       <div class="select-option-container">
-                        <span class="option-item" v-if="stateSet.includes(tag.id)" @click="switchOption(tag.id, 1)" :key="tag.id" v-for="(tag) in detail.skis_state_label" :class="{active: tag.id == stateIndex}">{{ tag.name }}</span>
+                        <span class="option-item" v-if="stateSet.includes(tag.id)" @click="changeDisabledOption(1, tag.id)" :key="tag.id" v-for="(tag) in detail.skis_state_label" :class="{active: tag.id == stateIndex}">{{ tag.name }}</span>
                         <span class="option-item disabled" v-else>{{tag.name}}</span>
                       </div>
                     </div>
                     <div class="product-select-row">
                       <span class="select-name">滑雪时长：</span>
                       <div class="select-option-container">
-                        <span class="option-item" v-if="dateSet.includes(tag.id)" @click="switchOption(tag.id, 2)" :key="tag.id" v-for="(tag) in detail.use_dates_label" :class="{active: tag.id == dataIndex}">{{ tag.name }}</span>
+                        <span class="option-item" v-if="timeSet.includes(tag.id)" @click="changeDisabledOption(2, tag.id)" :key="tag.id" v-for="(tag) in detail.skiing_time_label" :class="{active: tag.id == timeIndex}">{{ tag.name }}</span>
                         <span class="option-item disabled" v-else>{{tag.name}}</span>
                       </div>
                     </div>
                     <div class="product-select-row">
                       <span class="select-name">附加服务：</span>
                       <div class="select-option-container">
-                        <span class="option-item" v-if="serviceSet.includes(tag.id)" @click="switchOption(tag.id, 3)" :key="tag.id" v-for="(tag) in detail.add_services_label" :class="{active: tag.id == serviceIndex}">{{ tag.name }}</span>
+                        <span class="option-item" v-if="serviceSet.includes(tag.id)" @click="changeDisabledOption(3, tag.id)" :key="tag.id" v-for="(tag) in detail.add_services_label" :class="{active: tag.id == serviceIndex}">{{ tag.name }}</span>
                         <span class="option-item disabled" v-else>{{tag.name}}</span>
                       </div>
                     </div>
@@ -62,7 +78,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapActions } from 'vuex'
     import { isPositiveNum } from '../lib/util'
     import { Toast, MessageBox } from 'mint-ui'
     import * as tips from '../lib/tips'
@@ -75,6 +91,10 @@
                 pid: '',
                 count: 1,
                 loading: true,
+                timeOriginal: [],
+                stateOriginal: [],
+                dateOriginal: [],
+                serviceOriginal: [],
                 timeSet: [],
                 stateSet: [],
                 dateSet: [],
@@ -87,11 +107,12 @@
         },
         computed: {
             ...mapGetters({
-                'detail': 'productDetail'
+                'detail': 'productDetail',
+                'sceneInfo': 'sceneInfo'
             }),
             selectedProductId () {
               const t = this;
-              return `${t.timeIndex}_${t.stateIndex}_${t.dataIndex}_${t.serviceIndex}`;
+              return `${t.dataIndex}_${t.stateIndex}_${t.timeIndex}_${t.serviceIndex}`;
             },
             singleProductPrice () {
               const t = this;
@@ -113,6 +134,7 @@
         mounted () {
             this.pid = this.$route.query.pid
             this.$store.dispatch('getProductDetail', { pid: this.pid })
+            if (!this.sceneInfo) this.initSwipe()
         },
         methods: {
             swtichCartNum (e) {
@@ -149,49 +171,46 @@
             },
             splitOptions (productId) {
               const splitArr = productId.split('_');
-              const setArr = ['timeIndex', 'stateIndex', 'dataIndex', 'serviceIndex'];
+              const setArr = ['dataIndex', 'stateIndex', 'timeIndex', 'serviceIndex'];
 
               setArr.forEach((k, i) => {
                 this[k] = splitArr[i];
               })
-            }
-        },
-        components: {
-            shopHeader
-        },
-        watch: {
-            detail (to) {
-              const t = this;
-              const list = to.product_list;
-              const timeSet = t['timeSet'];
-
-              list.forEach(li => {
-                const [ time ] = li.label_view.split('_');
-
-                if (!timeSet.includes(+time)) timeSet.push(+time);
-              });
-
-              t.timeIndex = timeSet[0];
-
-              this.loading = false
             },
-            timeIndex (to) {
+            changeDisabledOption (clickRowIndex, to) {
               const t = this;
               const list = t.detail.product_list;
-              const setArr = ['timeSet', 'stateSet', 'dateSet', 'serviceSet'];
+              const setArr = ['dateSet', 'stateSet', 'timeSet', 'serviceSet'];
+              const setOriArr = ['dateOriginal', 'stateOriginal', 'timeOriginal', 'serviceOriginal'];
               let canSelectP = [];
               let firstItem = ''
 
+              // 检测改变是否能满足当前id
+              const nowIdArr = t.selectedProductId.split('_');
+              nowIdArr.splice(clickRowIndex, 1, to);
+              const newId = nowIdArr.join('_');
+
               list.forEach(li => {
-                if (li.label_view.startsWith(to)) {
+                if (li.label_view == newId) firstItem = newId;
+              })
+
+              // 寻找第一个满足条件的默认值
+              list.forEach(li => {
+                let splitArr = li.label_view.split('_');
+                if (splitArr[clickRowIndex] == to) {
                   if (!firstItem) firstItem = li.label_view
                   canSelectP.push(li);
                 }
               });
 
+              // 如果没找到符合条件的
+              if (!canSelectP.length) return;
+
               // 切换第一个维度的时候初始化其他维度
               setArr.forEach((item, index) => {
-                if (index > 0) {
+                if (index == clickRowIndex) {
+                  t[item] = JSON.parse(JSON.stringify(t[setOriArr[index]]));
+                } else {
                   t[item] = [];
                 }
               })
@@ -205,7 +224,7 @@
 
                 view.forEach((o, index) => {
                   // 只对应更新除了timeSet的集合
-                  if (index > 0) {
+                  if (index != clickRowIndex) {
                     let set = t[setArr[index]];
                     if (!set.includes(+o)) {
                       set.push(+o)
@@ -213,6 +232,37 @@
                   }
                 })
               });
+            },
+            ...mapActions([
+              'initSwipe'
+            ])
+        },
+        components: {
+            shopHeader
+        },
+        watch: {
+            detail (to) {
+              const t = this;
+              const list = to.product_list;
+              const originalArr = ['dateOriginal', 'stateOriginal', 'timeOriginal', 'serviceOriginal'];
+
+              list.forEach(li => {
+                const arr = li.label_view.split('_');
+
+                arr.forEach((item, index) => {
+                  const originalSet = t[originalArr[index]];
+
+                  if (!originalSet.includes(+item)) originalSet.push(+item);
+                })
+              });
+
+              t.dateSet = JSON.parse(JSON.stringify(t.dateOriginal));
+
+              t.dataIndex = t.dateSet[0];
+
+              t.changeDisabledOption(0, t.dataIndex);
+
+              this.loading = false
             }
         }
     }

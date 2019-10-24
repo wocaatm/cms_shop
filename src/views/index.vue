@@ -1,12 +1,12 @@
 <template>
     <div class="index-container">
-        <div class="search-contianer" ref='search'>
-            <router-link class='search-rotuer' :to="{path: '/search'}">
-                <div class="search-content-container">
-                    <span class="search-icon"><i class="fa fa-search"></i></span><span class="search-placeholder">搜索票务、酒店</span>
-                </div>
-            </router-link>
-        </div>
+<!--        <div class="search-contianer" ref='search'>-->
+<!--            <router-link class='search-rotuer' :to="{path: '/search'}">-->
+<!--                <div class="search-content-container">-->
+<!--                    <span class="search-icon"><i class="fa fa-search"></i></span><span class="search-placeholder">搜索票务、酒店</span>-->
+<!--                </div>-->
+<!--            </router-link>-->
+<!--        </div>-->
         <div class="index-main-container">
             <div class="slider-modules" v-if='swipes.length'>
                 <mt-swipe :auto="4000">
@@ -74,6 +74,7 @@
         padding-bottom 50px
         background #eee
         background-clip content-box
+        min-height calc(100vh - 50px)
         .search-contianer
             box-sizing border-box
             position fixed

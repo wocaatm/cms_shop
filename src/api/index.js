@@ -1,21 +1,25 @@
 import axios from 'axios'
+import * as cookie from '../lib/cookie'
+
+const bid = cookie.getCookie('bid');
 
 function config(query) {
     const config = {
-        baseURL: 'http://localhost:8002'
+        baseURL: 'http://api.xujiangyu.com/vs/'
     }
-    if (query) {
-        config.params = query
+    config.params = {
+      bid,
+      ...query
     }
     return config
 }
 
 export default {
     initSwipe: function () {
-        return axios.get('/index/swipe', config())
+        return axios.get('/getBusinessInfo', config())
     },
     getProductList: function (data) {
-        return axios.get('/index/product', config(data))
+        return axios.get('/getProductList', config(data))
     },
     getIndexCategory: function () {
         return axios.get('/index/category', config())
@@ -24,7 +28,7 @@ export default {
         return axios.get('/cart/detail', config())
     },
     getProductDetail: function (data) {
-        return axios.get('/index/detail', config(data))
+        return axios.get('/getProductInfo', config(data))
     },
     sendQrcode: function (data) {
         return axios.post('/index/sendqrcode', data, config())

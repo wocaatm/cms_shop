@@ -22,8 +22,7 @@ export const initProductList = ({ commit }, data) => {
     return Api.getProductList(data)
             .then(function (response) {
                 var result = response.data
-                commit(types.INIT_PRODUCT_LIST, result.product)
-                commit(types.HAS_MORE_PRODUCT, result.hasMore)
+                commit(types.INIT_PRODUCT_LIST, result.data)
             })
 }
 

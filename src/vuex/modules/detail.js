@@ -6,7 +6,7 @@ const state = {
 
 const mutations = {
     [INIT_PRODUCT_DETAIL] (state, info) {
-        state.info = info
+        state.info = info.data;
     }
 }
 

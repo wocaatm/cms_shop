@@ -44,3 +44,6 @@ export const searchResult = (state) => state.search.searchResult
 
 //获取办理押金的信息
 export const depositInfo = (state) => state.deposit.info
+
+// 详情页商家信息
+export const sceneInfo = (state) => state.index.sceneInfo
