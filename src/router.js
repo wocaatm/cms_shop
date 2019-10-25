@@ -178,7 +178,7 @@ var routers = new VueRouter({
 routers.beforeEach((to, from, next) => {
     /* 检测id没有的话就跳转到首页 */
     if (!cookie.hasCookie('jsfyopenid') || !cookie.hasCookie('bid')) {
-        window.location.href = 'http://wei.softykt.com'
+        window.location.href = 'http://v.xujiangyu.com?bid=901'
         return
     }
 
