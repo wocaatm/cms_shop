@@ -48,7 +48,7 @@
                 </li>
             </ul>
         </div>
-        <div class="logout-btn-container" v-if="!info.tel && !info.bindedTel"><span class="logout-btn" @click="goToBindTel">绑定手机</span></div>
+        <div class="logout-btn-container"><span class="logout-btn" @click="goToBindTel">绑定手机</span></div>
         <shop-footer :type='2'></shop-footer>
     </div>
 </template>

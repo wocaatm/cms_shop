@@ -83,7 +83,7 @@
                         console.log(this.qrcodeInfo.qrcode);
 
                         this.$nextTick(() => {
-                          QRCode.toDataURL(this.qrcodeInfo.qrcode || '123', (err, url) => {
+                          QRCode.toDataURL(this.qrcodeInfo.qrcode, (err, url) => {
                             if (err) console.log(err);
                             this.qrcodeUrl = url;
                           })
