@@ -48,7 +48,7 @@
         methods: {
             /* 从订单号进来 */
             initPayOrder () {
-                Api.getOrderDetail({ orderId: this.orderId })
+                Api.getOrderDetail({ ordernumber: this.orderId })
                     .then((response) => {
                         console.log(response)
                         if (response.data.success) {

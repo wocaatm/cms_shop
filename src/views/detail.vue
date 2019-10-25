@@ -108,7 +108,8 @@
         computed: {
             ...mapGetters({
                 'detail': 'productDetail',
-                'sceneInfo': 'sceneInfo'
+                'sceneInfo': 'sceneInfo',
+                'info': 'userCenterInfo'
             }),
             selectedProductId () {
               const t = this;
@@ -150,17 +151,18 @@
                 }
                 this.count = target.value
             },
-            switchOption (id, index) {
-              const setIndexArr = ['timeIndex', 'stateIndex', 'dataIndex', 'serviceIndex'];
-              this[setIndexArr[index]] = id;
-            },
             buy () {
               const t = this;
+              const memberId = t.info.memberid;
+              let id = ''
+              t.detail.product_list.forEach(p => {
+                if (p.label_view == t.selectedProductId) id = p.id;
+              })
               // 验证是否可以购买
-              Api.verifyCart({ productId: t.selectedProductId, count: t.count })
+              Api.verifyCart({ pid: id, num: t.count, member_id: memberId })
                 .then((response) => {
                   if (response.data.success) {
-                    t.$router.push({ path: '/pay', query: { orderId: response.data.orderId } })
+                    t.$router.push({ path: '/pay', query: { orderId: response.data.data.ordernumber } })
                   } else {
                     MessageBox.alert(response.data.errorMsg)
                   }

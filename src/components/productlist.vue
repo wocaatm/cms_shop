@@ -59,13 +59,11 @@
             })
         },
         mounted () {
-            this.type = this.$route.query.type
             this.initData()
         },
         methods: {
             initData () {
-                this.query.offset = 0
-                this.$store.dispatch('initProductList')
+                this.$store.dispatch('initProductList', {})
                     .then(() => {
                         this.loaded = true
                     })

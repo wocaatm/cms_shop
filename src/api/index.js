@@ -5,18 +5,21 @@ const bid = cookie.getCookie('bid');
 
 function config(query) {
     const config = {
-        baseURL: 'http://api.xujiangyu.com/vs/'
+        baseURL: 'http://v.xujiangyu.com/'
     }
-    config.params = {
-      bid,
-      ...query
+    
+    if (query) {
+      config.params = {
+        bid,
+        ...query
+      }
     }
     return config
 }
 
 export default {
     initSwipe: function () {
-        return axios.get('/getBusinessInfo', config())
+        return axios.get('/getBusinessInfo', config({}))
     },
     getProductList: function (data) {
         return axios.get('/getProductList', config(data))
@@ -40,10 +43,10 @@ export default {
         return axios.get('/order/list', config(data))
     },
     getOrderDetail: function (data) {
-        return axios.get('/order/detail', config(data))
+        return axios.get('/getOrderDetail', config(data))
     },
     verifyCart: function (data) {
-        return axios.post('/cart/verify', data, config())
+        return axios.get('/createOrder', config(data))
     },
     getPayJsParameters: function (data) {
         return axios.post('/index/pay', data, config())

@@ -62,9 +62,6 @@
                 'info': 'userCenterInfo'
             })
         },
-        created () {
-          console.log(this.info);
-        },
         components: {
             shopFooter
         }

@@ -35,7 +35,7 @@
         },
         mounted () {
             this.initSwipe()
-            this.initScrollEvent()
+            // this.initScrollEvent()
         },
         methods: {
             initScrollEvent () {

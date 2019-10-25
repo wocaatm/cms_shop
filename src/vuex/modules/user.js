@@ -3,8 +3,14 @@ import * as cookie from '../../lib/cookie'
 
 function getSkiTag () {
   if (cookie.hasCookie('userInfo')) {
+    let userInfoStr = cookie.getCookie('userInfo');
+    let decodeInfo = decodeURIComponent(userInfoStr);
+    let realInfo = decodeInfo.substr(7, decodeInfo.length - 8)
+    
+    console.log(decodeInfo.substr(7, decodeInfo.length - 8))
+    // console.log(decodeURIComponent(cookie.getCookie('userInfo')).substr(7, ))
     // 去掉think:
-    const userInfo = JSON.parse(decodeURIComponent(cookie.getCookie('userInfo')).substr(6));
+    const userInfo = JSON.parse(realInfo);
     
     return {
       ...userInfo,
