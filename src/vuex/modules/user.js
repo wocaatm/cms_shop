@@ -5,9 +5,8 @@ function getSkiTag () {
   if (cookie.hasCookie('userInfo')) {
     let userInfoStr = cookie.getCookie('userInfo');
     let decodeInfo = decodeURIComponent(userInfoStr);
-    let realInfo = decodeInfo.substr(7, decodeInfo.length - 8)
+    let realInfo = decodeInfo.substr(6, decodeInfo.length - 6)
     
-    console.log(decodeInfo.substr(7, decodeInfo.length - 8))
     // console.log(decodeURIComponent(cookie.getCookie('userInfo')).substr(7, ))
     // 去掉think:
     const userInfo = JSON.parse(realInfo);
