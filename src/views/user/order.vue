@@ -12,41 +12,43 @@
             <li class="order-type-item" :class='{active: tab === 4}' @click='tab = 4'><span class="tab-content">退款</span></li>
         </ul>
         <ul class="order-list-container" v-if='!loaded || orders.length'>
-            <li class="order-list-item" v-for='(order, index) in orders'>
-                <div class="order-item-header">
+              <li class="order-list-item" v-for='(order, index) in orders' :key="index">
+                <router-link :to="{ path: '/order_qrcode', query: { orderId: order.ordernumber}}">
+                  <div class="order-item-header">
                     <div class="header-left">
-                        <p class="order-id">订单号：{{order.ordernumber}}</p>
-                        <span class="order-create-time">{{order.createTime}}</span>
+                      <p class="order-id">订单号：{{order.ordernumber}}</p>
+                      <span class="order-create-time">{{order.createTime}}</span>
                     </div>
                     <div class='status' :class='getClass(order.state)'>
                       {{order.state | stateTips}}
                     </div>
-                </div>
-                <div class="order-product-container">
+                  </div>
+                  <div class="order-product-container">
                     <ul>
-                        <li class="order-product-item clearfix">
-                            <div class="product-item-thumb fl">
-                                <img :src="order.thumb" alt="">
-                            </div>
-                            <div class="product-item-title-description fl">
-                                <p class="product-item-title single-ellipsis">{{order.name}}</p>
-                                <p class="product-item-description">{{order.description}}</p>
-                            </div>
-                            <div class="product-price-count fr">
-                                <p class="product-price">￥{{order.price}}</p>
-                                <p class="product-user" v-if="order.state == 2">{{ `已使用${order.useing}` }}</p>
-                                <p class="product-count">x {{order.count}}</p>
-                            </div>
-                        </li>
+                      <li class="order-product-item clearfix">
+                        <div class="product-item-thumb fl">
+                          <img :src="order.thumb" alt="">
+                        </div>
+                        <div class="product-item-title-description fl">
+                          <p class="product-item-title single-ellipsis">{{order.name}}</p>
+                          <p class="product-item-description">{{order.description}}</p>
+                        </div>
+                        <div class="product-price-count fr">
+                          <p class="product-price">￥{{order.price}}</p>
+                          <p class="product-user" v-if="order.state == 2">{{ `已使用${order.useing}` }}</p>
+                          <p class="product-count">x {{order.count}}</p>
+                        </div>
+                      </li>
                     </ul>
-                </div>
+                  </div>
+                </router-link>
                 <div class="order-item-opration clearfix">
-                    <span class="all-money fl">商品总额：<span class="price">￥{{order.total}}</span></span>
-                    <div class="opration-btn-container fr">
-                        <span class='opration-link' v-for='opration in oprationArr(order.state)' :data-a="opration.a" :data-opration='opration.opration' :data-router='opration.router' @click='oprationOrder($event)' :data-oid='order.ordernumber' :data-style='opration.class'>{{opration.text}}</span>
-                    </div>
+                  <span class="all-money fl">商品总额：<span class="price">￥{{order.total}}</span></span>
+                  <div class="opration-btn-container fr">
+                    <span class='opration-link' v-for='opration in oprationArr(order.state)' :data-a="opration.a" :data-opration='opration.opration' :data-router='opration.router' @click.stop='oprationOrder($event)' :data-oid='order.ordernumber' :data-style='opration.class'>{{opration.text}}</span>
+                  </div>
                 </div>
-            </li>
+              </li>
         </ul>
         <div class="no-order-container" v-else>
             <img class='inline' src="../../assets/images/no_order.png" alt="">

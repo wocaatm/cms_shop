@@ -68,7 +68,7 @@ export default {
         return axios.post('/index/payDeposit', data, config())
     },
     getQrcodeInfo: function (data) {
-        return axios.get('/index/qrcode', config(data))
+        return axios.get('/getOrderDetail', config(data))
     },
     remark: function (data) {
         return axios.post('/index/remark', data, config())
