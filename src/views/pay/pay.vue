@@ -3,19 +3,19 @@
         <shop-header title='支付产品详情'>
             <span slot='left' @click='goBack()'><i class="fa fa-angle-left fa-2x"></i></span>
         </shop-header>
-        <ul class='product_pay_ul' v-if='payInfo'>
-            <li class="product_pay_item" v-for='product in payInfo.products'>
+        <ul class='product_pay_ul'>
+            <li class="product_pay_item">
                 <div class="product_title_option">
-                  <div class="product_title">{{product.title}}</div>
-                  <div class="product_option">{{ product.options.join('，') }}</div>
+                  <div class="product_title">{{payInfo.name}}</div>
+                  <div class="product_option">{{ payInfo.label }}</div>
                 </div>
                 <div class="product_count_price">
-                    <span class="product_price flex-info">￥ {{product.price}}</span>
-                    <span class="product_count flex-info">x {{product.count}}</span>
+                    <span class="product_price flex-info">￥ {{payInfo.price}}</span>
+                    <span class="product_count flex-info">x {{payInfo.count}}</span>
                 </div>
             </li>
         </ul>
-        <div class="pay_money_all"><span class="pay_all_tip">总价：</span>￥ {{payInfo.allPrice.toFixed(2)}}</div>
+        <div class="pay_money_all"><span class="pay_all_tip">总价：</span>￥ {{(+payInfo.total).toFixed(2)}}</div>
         <div class="maky-pay-container"><span class="make_pay_btn" @click='pay()'>微信支付</span></div>
     </div>
 </template>
@@ -50,10 +50,9 @@
             initPayOrder () {
                 Api.getOrderDetail({ ordernumber: this.orderId })
                     .then((response) => {
-                        console.log(response)
                         if (response.data.success) {
                             // 获取订单的产品
-                            this.payInfo = response.data
+                            this.payInfo = response.data.data;
                         } else {
                             this.$router.push('/usercenter')
                         }
@@ -63,29 +62,15 @@
                 if (this.payOnce) return
                 this.payOnce = true
                 Indicator.open()
-                let products = this.payInfo.products
-                const payInfo = { products }
-                payInfo.orderId = this.orderId
-                Api.getPayJsParameters({ payInfo })
+                Api.getPayJsParameters({ ordernumber: this.orderId })
                     .then((response) => {
                         Indicator.close()
                         if (response.data.success) {
-                            // 商品价格为0直接通过
-                            if (response.data.jsParamters === 0) {
-                                Toast({
-                                    message: tips.PAY_SUCCESS,
-                                    position: 'middle',
-                                    duration: 1500
-                                })
-                                setTimeout(() => {
-                                    this.$router.push({path: '/order', query: {tab: 2}})
-                                }, 1500)
-                                return
-                            }
-                            window.location.href = payUrl + '?jsParamters=' + encodeURI(JSON.stringify(response.data.jsParamters)) + '&successUrl=' + payRedirectUrlSuccess + '&failUrl=' + payRedirectUrlFail
+                          let url = payUrl + '?jsParamters=' + encodeURI(JSON.stringify(response.data.jsParamters)) + '&successUrl=' + payRedirectUrlSuccess + '&failUrl=' + payRedirectUrlFail
+                           window.location.href = url;
                         } else {
                             Toast({
-                                message: response.data.errorMsg,
+                                message: response.data.msg,
                                 position: 'middle',
                                 duration: 1500
                             })

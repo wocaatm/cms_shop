@@ -318,9 +318,6 @@
         watch: {
             'tab' (to, from) {
                 this.changeType()
-            },
-            'secondTab' (to, from) {
-                this.changeType()
             }
         }
     }

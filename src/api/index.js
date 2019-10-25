@@ -3,6 +3,13 @@ import * as cookie from '../lib/cookie'
 
 const bid = cookie.getCookie('bid');
 
+function getOpenId () {
+  const idStr = cookie.getCookie('jsfyopenid');
+  return idStr.substr(1, idStr.length - 2);
+}
+
+const jsfyopenid = getOpenId();
+
 function config(query) {
     const config = {
         baseURL: 'http://v.xujiangyu.com/'
@@ -49,7 +56,7 @@ export default {
         return axios.get('/createOrder', config(data))
     },
     getPayJsParameters: function (data) {
-        return axios.post('/index/pay', data, config())
+        return axios.get('/orderPay', config({ ...data, jsfyopenid }))
     },
     search: function (data) {
         return axios.get('/index/search', config(data))
