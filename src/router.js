@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import * as cookie from './lib/cookie'
+import * as cookie from './lib/cookie'
 
 Vue.use(VueRouter)
 
@@ -176,33 +176,13 @@ var routers = new VueRouter({
 })
 
 routers.beforeEach((to, from, next) => {
-    next()
     /* 检测id没有的话就跳转到首页 */
-    // if (!cookie.hasCookie('jfyopenid') || !cookie.hasCookie('openid') || !cookie.hasCookie('skiId')) {
-    //     window.location.href = 'http://wei.softykt.com'
-    //     return
-    // }
-    // if (cookie.hasCookie('newscenic')) {
-    //     cookie.delCookie('newscenic')
-    //     cookie.delCookie('userinfo')
-    // }
-    // if (cookie.hasCookie('scenicinfo')) {
-    //     document.title = cookie.getCookie('scenicinfo') ? cookie.getCookie('scenicinfo') : '金色飞鹰'
-    // }
-    // if (to.matched.some(record => record.meta.requiresAuth)) {
-    //     if (!cookie.hasCookie('userinfo_' + cookie.getCookie('skiId'))) {
-    //         next({
-    //             path: '/login',
-    //             query: {
-    //                 redirect: to.fullPath
-    //             }
-    //         })
-    //     } else {
-    //         next()
-    //     }
-    // } else {
-    //     next()
-    // }
+    if (!cookie.hasCookie('jsfyopenid') || !cookie.hasCookie('bid')) {
+        window.location.href = 'http://wei.softykt.com'
+        return
+    }
+
+    next();
 })
 
 export default routers
