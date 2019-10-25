@@ -41,11 +41,11 @@ const detail = resolve => {
     })
 }
 
-// const login = resolve => {
-//     require.ensure(['./views/login'], () => {
-//         resolve(require('./views/login'))
-//     })
-// }
+const login = resolve => {
+    require.ensure(['./views/login'], () => {
+        resolve(require('./views/login'))
+    })
+}
 
 const order = resolve => {
     require.ensure(['./views/user/order'], () => {
@@ -128,10 +128,10 @@ var routers = new VueRouter({
             path: '/detail',
             component: detail
         },
-        // {
-        //     path: '/login',
-        //     component: login
-        // },
+        {
+            path: '/bindtel',
+            component: login
+        },
         {
             path: '/order',
             component: order,

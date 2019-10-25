@@ -25,63 +25,33 @@ const opration = {
         {
             opration: 3,
             text: '办理押金',
-            router: '/order_deposit',
-            class: ''
-        }
-    ],
-    "21": [
-        {
-            opration: 6,
-            text: '解除绑定',
-            router: '',
-            class: ''
-        },
-        {
-            opration: 3,
-            text: '办理押金',
-            router: '/order_deposit',
-            class: ''
-        }
-    ],
-    "22": [
-        {
-            opration: 3,
-            text: '办理押金',
-            router: '/order_deposit',
-            class: ''
-        }
-    ],
-    "23": [
-        {
-            opration: 5,
-            text: '申请退款',
-            router: '',
+            a: 'http://www.baidu.com',
             class: ''
         }
     ],
     "3": [
         {
-            opration: 4,
-            text: '卡码',
-            router: '/order_qrcode',
-            class: ''
+          opration: 2,
+          text: '删除订单',
+          router: '',
+          class: 'delete'
         }
     ],
     "4": [
-        {
-            opration: 4,
-            text: '卡码',
-            router: '/order_qrcode',
-            class: ''
-        }
+      {
+        opration: 2,
+        text: '删除订单',
+        router: '',
+        class: 'delete'
+      }
     ],
     "d": [
-        {
-            opration: 2,
-            text: '删除订单',
-            router: '',
-            class: 'delete'
-        }
+      {
+        opration: 2,
+        text: '删除订单',
+        router: '',
+        class: 'delete'
+      }
     ]
 }
 

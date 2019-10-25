@@ -41,13 +41,13 @@ export default {
         return axios.get('/getProductInfo', config(data))
     },
     sendQrcode: function (data) {
-        return axios.post('/index/sendqrcode', data, config())
+        return axios.get('/getTelCode', config(data))
     },
     login: function (data) {
         return axios.post('/index/login', data, config())
     },
     getOrderList: function (data) {
-        return axios.get('/order/list', config(data))
+        return axios.get('/getOrderList', config(data))
     },
     getOrderDetail: function (data) {
         return axios.get('/getOrderDetail', config(data))
@@ -77,7 +77,7 @@ export default {
         return axios.post('/index/deleteOrder', data, config())
     },
     payBack: function (data) {
-        return axios.post('/index/payBack', data, config())
+        return axios.get('/refundOrder', config(data))
     },
     unbindOrder: function (data) {
         return axios.post('/index/unbindOrder', data, config())
@@ -93,5 +93,8 @@ export default {
     },
     saveQrocdeInfo: function (data) {
         return axios.post('/user/saveQrcode', data, config())
+    },
+    bind: function (data) {
+      return axios.get('/bindingTel', config(data));
     }
 }

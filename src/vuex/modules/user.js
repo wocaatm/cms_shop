@@ -12,9 +12,12 @@ function getSkiTag () {
     // 去掉think:
     const userInfo = JSON.parse(realInfo);
     
+    const bindedTel = cookie.getCookie('bindedTel');
+    
     return {
       ...userInfo,
-      portrait: decodeURIComponent(userInfo.portrait)
+      portrait: decodeURIComponent(userInfo.portrait),
+      bindedTel
     }
   } else {
     return false

@@ -8,75 +8,43 @@
             <li class="order-type-item" :class='{active: tab === 0}' @click='tab = 0'><span class="tab-content">全部订单</span></li>
             <li class="order-type-item" :class='{active: tab === 1}' @click='tab = 1'><span class="tab-content">待付款</span></li>
             <li class="order-type-item" :class='{active: tab === 2}' @click='tab = 2'><span class="tab-content">已付款</span></li>
-            <li class="order-type-item" :class='{active: tab === 4}' @click='tab = 4'><span class="tab-content">已消费</span></li>
-            <li class="order-type-item" :class='{active: tab === 5}' @click='tab = 5'><span class="tab-content">退款</span></li>
+            <li class="order-type-item" :class='{active: tab === 3}' @click='tab = 3'><span class="tab-content">已消费</span></li>
+            <li class="order-type-item" :class='{active: tab === 4}' @click='tab = 4'><span class="tab-content">退款</span></li>
         </ul>
         <ul class="order-list-container" v-if='!loaded || orders.length'>
-            <li class="order-list-item" v-for='(order, index) in orders' v-if='order.state > 0'>
+            <li class="order-list-item" v-for='(order, index) in orders'>
                 <div class="order-item-header">
                     <div class="header-left">
-                        <p class="order-id">订单号：{{order.orderid}}</p>
+                        <p class="order-id">订单号：{{order.ordernumber}}</p>
                         <span class="order-create-time">{{order.createTime}}</span>
                     </div>
-                    <div class='status' :class='getClass(order.state)'><span class="associate-qrocde" v-if='order.asscoiateLink' @click='showAssociateQrcode(order.asscoiateLink, order.orderCode)'><i class="fa fa-qrcode fa-lg"></i></span>{{order.state | stateTips}}</div>
+                    <div class='status' :class='getClass(order.state)'>
+                      {{order.state | stateTips}}
+                    </div>
                 </div>
                 <div class="order-product-container">
                     <ul>
-                        <li class="order-product-item clearfix" v-for='product in order.products'>
+                        <li class="order-product-item clearfix">
                             <div class="product-item-thumb fl">
-                                <img :src="product.thumb" alt="">
+                                <img :src="order.thumb" alt="">
                             </div>
                             <div class="product-item-title-description fl">
-                                <p class="product-item-title single-ellipsis">{{product.title}}</p>
-                                <p class="product-item-description">{{product.description}}</p>
+                                <p class="product-item-title single-ellipsis">{{order.name}}</p>
+                                <p class="product-item-description">{{order.description}}</p>
                             </div>
                             <div class="product-price-count fr">
-                                <p class="product-price">￥{{product.price}}</p>
-                                <p class="product-count">x {{product.count}}</p>
+                                <p class="product-price">￥{{order.price}}</p>
+                                <p class="product-user" v-if="order.state == 2">{{ `已使用${order.useing}` }}</p>
+                                <p class="product-count">x {{order.count}}</p>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="order-item-opration clearfix">
-                    <span class="all-money fl">商品总额：<span class="price">￥{{order.allPrice}}</span></span>
+                    <span class="all-money fl">商品总额：<span class="price">￥{{order.total}}</span></span>
                     <div class="opration-btn-container fr">
-                        <span class='opration-link' v-for='opration in oprationArr(order.state)' :data-opration='opration.opration' :data-router='opration.router' @click='oprationOrder($event, index)' :data-oid='order.orderid' :data-style='opration.class'>{{opration.text}}</span>
+                        <span class='opration-link' v-for='opration in oprationArr(order.state)' :data-a="opration.a" :data-opration='opration.opration' :data-router='opration.router' @click='oprationOrder($event)' :data-oid='order.ordernumber' :data-style='opration.class'>{{opration.text}}</span>
                     </div>
-                </div>
-            </li>
-            <li class="order-list-item" v-else>
-                <div class="order-item-header">
-                    <div class="header-left">
-                        <p class="order-id">订单号：{{order.orderid}}</p>
-                        <span class="order-create-time">{{order.createTime}}</span>
-                    </div>
-                    <div class='status'><span class="associate-qrocde" v-if='order.asscoiateLink' @click='showAssociateQrcode(order.asscoiateLink, order.orderCode)'><i class="fa fa-qrcode fa-lg"></i></span></div>
-                </div>
-                <div class="order-product-container" v-for='(stateProductS, state) in order.products'>
-                    <div class="order-product-state status" :class='getClass(state)'>{{state | stateTips}}</div>
-                    <ul>
-                        <li class="order-product-item clearfix" v-for='product in stateProductS'>
-                            <div class="product-item-thumb fl">
-                                <img :src="product.thumb" alt="">
-                            </div>
-                            <div class="product-item-title-description fl">
-                                <p class="product-item-title single-ellipsis">{{product.title}}</p>
-                                <p class="product-item-description">{{product.description}}</p>
-                            </div>
-                            <div class="product-price-count fr">
-                                <p class="product-price">￥{{product.price}}</p>
-                                <p class="product-count">x {{product.count}}</p>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="order-item-opration clearfix">
-                        <div class="opration-btn-container fr">
-                            <span class='opration-link' v-for='opration in oprationArr(state)' :data-opration='opration.opration' :data-router='opration.router' @click='oprationOrder($event, index, state)' :data-oid='order.orderid' :data-style='opration.class'>{{opration.text}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="order-item-opration clearfix">
-                    <span class="all-money fl">商品总额：<span class="price">￥{{order.allPrice}}</span></span>
                 </div>
             </li>
         </ul>
@@ -111,8 +79,6 @@
         data () {
             return {
                 tab: 0,
-                fromThird: 0,
-                secondTab: 2,
                 once: '',
                 refreshFlag: false,
                 loaded: false,
@@ -132,7 +98,6 @@
             // if (this.$route.query.secondTab !== undefined) this.secondTab = +this.$route.query.secondTab
             if (this.$route.query.type && this.orderType) {
                 this.tab = this.orderType.tab
-                this.secondTab = this.orderType.secondTab
             }
             this.initData()
         },
@@ -159,10 +124,9 @@
                     text: '加载中...',
                     spinnerType: 'double-bounce'
                 })
-                const type = this.tab === 2 ? this.secondTab : this.tab
+                const type = this.tab
                 const data = {
-                    type: type,
-                    fromThird: this.fromThird
+                  state: type
                 }
                 this.$store.dispatch('getOrderList', data)
                     .then(() => {
@@ -192,19 +156,19 @@
                 var orderid = target.getAttribute('data-oid')
                 var router = target.getAttribute('data-router')
                 var opration = target.getAttribute('data-opration')
+                var a = target.getAttribute('data-a');
                 if (router) {
                     if (+opration === 1) {
                         /* 进入订单再支付query 订单号 */
                         this.$router.push({path: router, query: { orderId: orderid }})
-                    } else {
-                        /* 进入其他order操作/orderid */
-                        this.$router.push({path: router, query: { oid: orderid }})
                     }
+                } else if (a) {
+                  window.href = a;
                 } else {
                     if (+opration === 2) {
-                        this.delelteOrder(orderid, index, state)
+                        this.delelteOrder(orderid)
                     } else {
-                        this.payBack(orderid, index, state)
+                        this.payBack(orderid)
                     }
                 }
             },
@@ -254,7 +218,7 @@
             payBack (orderId, index, state) {
                 MessageBox.confirm(tips.NEED_PAY_BACK)
                     .then(() => {
-                        Api.payBack({ orderId })
+                        Api.payBack({ ordernumber: orderId })
                             .then((response) => {
                                 if (response.data.success) {
                                     if (state) {
@@ -269,7 +233,7 @@
                                     })
                                 } else {
                                     Toast({
-                                        message: response.data.errorMsg,
+                                        message: response.data.msg,
                                         position: 'middle',
                                         duration: 1500
                                     })

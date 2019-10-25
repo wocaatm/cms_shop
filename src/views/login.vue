@@ -1,6 +1,6 @@
 <template>
     <div class="login-container">
-        <shop-header title='验证手机'>
+        <shop-header title='绑定手机'>
             <span slot='left' @click='goBack()'><i class="fa fa-angle-left fa-2x"></i></span>
         </shop-header>
         <div class="login-form-container">
@@ -12,7 +12,7 @@
                 <input class='input' type="text" placeholder="短信验证码" v-model='qrcode'>
             </div>
         </div>
-        <div class="form-submit-btn" @click='login()'>确定</div>
+        <div class="form-submit-btn" @click='bind()'>确定</div>
     </div>
 </template>
 
@@ -23,6 +23,7 @@
     import { Toast } from 'mint-ui'
     import Api from '../api/index'
     import { mapGetters } from 'vuex'
+    import * as cookie from '../lib/cookie';
 
     export default {
         data () {
@@ -49,16 +50,6 @@
                 clearInterval(this.timeout)
                 this.timeout = null
             }
-            /* 重新登录的购物车刷新 */
-            this.$store.dispatch('loginRefreshCart')
-                .then(() => {
-                    next()
-                })
-        },
-        mounted () {
-            if (this.info) this.$router.push('/usercenter')
-            /* 返回来源路由 */
-            this.redirect = this.$route.query.redirect
         },
         methods: {
             getQrcode () {
@@ -73,7 +64,7 @@
                     })
                     return
                 }
-                Api.sendQrcode({ telephone })
+                Api.sendQrcode({ tel: telephone })
                     .then((response) => {
                         if (response.data.success) {
                             Toast({
@@ -106,7 +97,7 @@
                         })
                     })
             },
-            login () {
+            bind () {
                 if (!checkTelephone(this.telephone)) {
                     Toast({
                         message: tips.ERROR_NUMBER,
@@ -125,10 +116,10 @@
                     return
                 }
                 var data = {
-                    telephone: this.telephone,
-                    qrcode: this.qrcode
+                    tel: this.telephone,
+                    code: this.qrcode
                 }
-                this.$store.dispatch('login', data)
+                this.$store.dispatch('bind', data)
                     .then((value) => {
                         if (value.success === true) {
                             Toast({
@@ -136,13 +127,10 @@
                                 position: 'middle',
                                 duration: 1500
                             })
-                            if (value.redirectUrl) {
-                                window.location.href = value.redirectUrl
-                            } else {
-                                setTimeout(() => {
-                                    this.$router.push(this.redirect ? this.redirect : '/usercenter')
-                                }, 1500)
-                            }
+                            cookie.setCookie('bindedTel', true);
+                            setTimeout(() => {
+                              window.location.href = '/usercenter';
+                            }, 1500)
                         } else {
                             Toast({
                                 message: value.errorMsg,
@@ -160,7 +148,7 @@
                     })
             },
             goBack () {
-                this.$router.push('/')
+                this.$router.push('/usercenter')
             }
         },
         components: {

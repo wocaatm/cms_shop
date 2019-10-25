@@ -77,19 +77,17 @@ export const getProductDetail = ({ commit }, data) => {
 }
 
 //登录操作
-export const login = ({ commit }, data) => {
-    return Api.login(data)
+export const bind = ({ commit }, data) => {
+    return Api.bind(data)
             .then(function (response) {
                 if (response.data.success) {
-                    commit(types.INIT_LOGING_USER, response.data.userinfo)
                     return {
-                        success: true,
-                        redirectUrl: response.data.redirectUrl
+                        success: true
                     }
                 } else {
                     return {
                         success: false,
-                        errorMsg: response.data.errorMsg
+                        errorMsg: response.data.msg
                     }
                 }
             })
@@ -107,7 +105,8 @@ export const logout = ({ commit }) => {
 export const getOrderList = ({ commit }, data) => {
     return Api.getOrderList(data)
             .then(function (response) {
-                commit(types.INIT_ORDER_LIST, response.data)
+              console.log(response);
+                commit(types.INIT_ORDER_LIST, response.data.data)
             })
 }
 
