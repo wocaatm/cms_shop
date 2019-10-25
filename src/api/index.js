@@ -74,7 +74,7 @@ export default {
         return axios.post('/index/remark', data, config())
     },
     deleteOrder: function (data) {
-        return axios.post('/index/deleteOrder', data, config())
+        return axios.get('/deleteOrder', config(data))
     },
     payBack: function (data) {
         return axios.get('/refundOrder', config(data))

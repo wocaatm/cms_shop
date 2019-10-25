@@ -45,7 +45,7 @@
                 <div class="order-item-opration clearfix">
                   <span class="all-money fl">商品总额：<span class="price">￥{{order.total}}</span></span>
                   <div class="opration-btn-container fr">
-                    <span class='opration-link' v-for='opration in oprationArr(order.state)' :data-a="opration.a" :data-opration='opration.opration' :data-router='opration.router' @click.stop='oprationOrder($event)' :data-oid='order.ordernumber' :data-style='opration.class'>{{opration.text}}</span>
+                    <span class='opration-link' v-for='opration in oprationArr(order.state)' :data-a="opration.a" :data-opration='opration.opration' :data-router='opration.router' @click.stop='oprationOrder($event, index)' :data-oid='order.ordernumber' :data-style='opration.class'>{{opration.text}}</span>
                   </div>
                 </div>
               </li>
@@ -153,7 +153,7 @@
             oprationArr (value) {
                 return value in oprations ? oprations[value] : oprations['d']
             },
-            oprationOrder (e, index, state) {
+            oprationOrder (e, index) {
                 var target = e.target
                 var orderid = target.getAttribute('data-oid')
                 var router = target.getAttribute('data-router')
@@ -168,9 +168,9 @@
                   window.href = a;
                 } else {
                     if (+opration === 2) {
-                        this.delelteOrder(orderid)
+                        this.delelteOrder(orderid, index)
                     } else {
-                        this.payBack(orderid)
+                        this.payBack(orderid, index)
                     }
                 }
             },
@@ -191,22 +191,18 @@
                 this.showQrcodeUrl = url
                 this.orderCode = orderCode
             },
-            delelteOrder (orderId, index, state) {
+            delelteOrder (orderId, index) {
                 MessageBox.confirm(tips.DELETE_ORDER_OR_NOT)
                     .then(() => {
-                        Api.deleteOrder({ orderId })
+                        Api.deleteOrder({ ordernumber: orderId })
                             .then((response) => {
                                 if (response.data.success) {
-                                    if (state) {
-                                        this.switchOrders(index, state)
-                                    } else {
-                                        this.orders.splice(index, 1)
-                                    }
                                     Toast({
                                         message: tips.DELETE_SUCCESS,
                                         position: 'middle',
                                         duration: 1500
                                     })
+                                   this.orders.splice(index, 1)
                                 } else {
                                     Toast({
                                         message: response.data.errorMsg,
@@ -217,17 +213,13 @@
                             })
                     }, () => {})
             },
-            payBack (orderId, index, state) {
+            payBack (orderId, index) {
                 MessageBox.confirm(tips.NEED_PAY_BACK)
                     .then(() => {
                         Api.payBack({ ordernumber: orderId })
                             .then((response) => {
                                 if (response.data.success) {
-                                    if (state) {
-                                        this.switchOrders(index, state)
-                                    } else {
-                                        this.orders.splice(index, 1)
-                                    }
+                                    this.orders.splice(index, 1)
                                     Toast({
                                         message: tips.PAY_BACK_SUCCESS,
                                         position: 'middle',
@@ -242,25 +234,6 @@
                                 }
                             })
                     }, () => {})
-            },
-            switchOrders (index, state) {
-                var length = 0
-                var last
-                var newOrder = this.orders[index]
-                var newProduct = {}
-                for (var p in newOrder.products) {
-                    if (+p !== +state) {
-                        length++
-                        newProduct[p] = newOrder.products[p]
-                        last = p
-                    }
-                }
-                if (length === 1) {
-                    newProduct = newOrder.products[last]
-                    newOrder.state = last
-                }
-                newOrder.products = newProduct
-                this.orders.splice(index, 1, newOrder)
             }
         },
         beforeRouteEnter (to, from, next) {
