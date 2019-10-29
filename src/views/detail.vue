@@ -154,7 +154,15 @@
             buy () {
               const t = this;
               const memberId = t.info.memberid;
+              const { tel, bindedTel } = t.info;
               let id = ''
+
+              if (!tel && !bindedTel) {
+                MessageBox.alert('请先绑定手机号');
+                t.$router.push('/login');
+                return
+              }
+
               t.detail.product_list.forEach(p => {
                 if (p.label_view == t.selectedProductId) id = p.id;
               })

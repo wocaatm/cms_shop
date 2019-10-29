@@ -129,7 +129,7 @@
                                 duration: 1500
                             })
                             // 设置绑定的cookie
-                            cookie.setCookie('bindedTel', true);
+                            cookie.setCookie('bindedTel', this.telephone);
                             // 修改store
                             t.$store.commit('');
                             setTimeout(() => {
