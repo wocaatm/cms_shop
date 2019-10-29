@@ -22,17 +22,9 @@ function getSkiTag () {
     return false
   }
 }
-function getUserFromCookie () {
-    var tag = getSkiTag()
-    if (!tag) return false
-    if (cookie.hasCookie(tag)) {
-        return cookie.getCookie(tag)
-    }
-    return false
-}
 
 const state = {
-    userinfo: getSkiTag() || ''
+    userinfo: getSkiTag() || {}
 }
 
 const mutations = {
@@ -45,6 +37,7 @@ const mutations = {
         state.userinfo = ''
     },
     [BIND_TEL_FLAG] (state, tel) {
+      console.log(state)
       state.userinfo.bindedTel = tel;
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="login-container">
         <shop-header title='绑定手机'>
-            <span slot='left' @click='goBack()'><i class="fa fa-angle-left fa-2x"></i></span>
+            <span slot='left' @click='goBack'><i class="fa fa-angle-left fa-2x"></i></span>
         </shop-header>
         <div class="login-form-container">
             <div class="form-row telephone">
@@ -43,13 +43,6 @@
             ...mapGetters({
                 'info': 'userCenterInfo'
             })
-        },
-        beforeRouteLeave (to, from, next) {
-            /* 清除路由内的setInterval定时器 */
-            if (this.timeout) {
-                clearInterval(this.timeout)
-                this.timeout = null
-            }
         },
         methods: {
             getQrcode () {
@@ -143,7 +136,8 @@
                             })
                         }
                     })
-                    .catch(() => {
+                    .catch((err) => {
+                        console.log(err);
                         Toast({
                             message: tips.ERROR_SERVER,
                             position: 'middle',

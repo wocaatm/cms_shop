@@ -12,12 +12,7 @@
                     <div class="info-thumb-container">
                       <img :src="product.pic" alt="" class="info-thumb">
                     </div>
-                    <div style="margin: 0 9px;">
-                      <div class="info-title-price-part">
-                        <span class="title-part">{{ product.name }}</span>
-                      </div>
-                      <div class="info-description single-ellipsis">{{ product.description }}</div>
-                    </div>
+                    <div class="title-part">{{ product.name }}</div>
                 </router-link>
             </li>
             <div class="loading-more-container" v-if='loading'>
@@ -77,29 +72,25 @@
         margin 10px 0
         background #eee
         .product-item
-            position relative
             margin 12px 9px 0px
-            padding-bottom 10px
             background #fff
             border-radius 6px
             overflow hidden
             .info-thumb
               width 100%
               height 180px
-          .info-title-price-part
-              display flex
-              justify-content space-between
-              margin 9px 0 4px
-              .title-part
-                color #333
-                font-size 18px
-              .price-part
-                color #46A9FC
-                font-size 18px
-                font-weight bold
-            .info-description
-              font-size 14px
-              color #666
+          .title-part
+              position absolute
+              left 0
+              right 0
+              bottom 0
+              background rgba(0,0,0,.4)
+              padding 6px 10px
+              color #fff
+              font-size 16px
+          .product-info-container
+              position relative
+              display block
         .loading-more-container
             padding 6px 0
             text-align center

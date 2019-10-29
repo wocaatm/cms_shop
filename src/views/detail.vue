@@ -8,7 +8,7 @@
                 <div class="detail-info-thumb" v-if='detail.pic'>
                     <img class='detail-thumb' :src="detail.pic" alt="">
                 </div>
-                <h3 class="detail-content-title" style="margin: 6px -10px 0" v-if="sceneInfo">商家信息</h3>
+                <h3 class="detail-content-title" style="margin: 0px -10px 0" v-if="sceneInfo">商家信息</h3>
                 <div class="shop-info-container">
                   <div class="product-select-row">
                     <span class="select-name">景区名称：</span>
@@ -159,11 +159,13 @@
 
               if (!tel && !bindedTel) {
                 Toast({
-                  message: '请先登录',
+                  message: '请先绑定手机号',
                   position: 'middle',
                   duration: 1500
                 })
-                t.$router.push('/bindtel');
+                setTimeout(() => {
+                  t.$router.push('/bindtel');
+                }, 1500)
                 return
               }
 
@@ -287,7 +289,6 @@
     .product-detail-container
         padding 50px 0
         .detail-main-container
-            padding-bottom 40px
             .detail-category
                 padding 10px 15px
                 font-size 16px
@@ -295,10 +296,9 @@
                 background #f0f2f5
             .detail-info-container
                 padding 0 10px
-                margin-top 10px
                 .detail-info-thumb
-                    width calc(100vw - 20px)
-                    height calc(100vw - 20px)
+                    margin 0 -10px
+                    height 180px;
                     .block
                         height 100%
                     .detail-thumb
@@ -350,12 +350,14 @@
                   .select-option-container
                     display flex
                     flex-wrap wrap
+                    align-items center
+                    margin-bottom 6px
                     .option-item
-                      padding 2px 10px
+                      padding 5px 10px
                       border 1px solid #11b111
                       border-radius 4px
                       color #333
-                      margin 0 6px 8px 0
+                      margin-right 10px
                       &.active
                         background #11b111
                         color #fff

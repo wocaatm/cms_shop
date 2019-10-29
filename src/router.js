@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import * as cookie from './lib/cookie'
+// import * as cookie from './lib/cookie'
 
 Vue.use(VueRouter)
 
@@ -10,30 +10,11 @@ const index = resolve => {
     })
 }
 
-const search = resolve => {
-    require.ensure(['./views/search'], () => {
-        resolve(require('./views/search'))
-    })
-}
-
-// const shopcart = resolve => {
-//     require.ensure(['./views/shopcart'], () => {
-//         resolve(require('./views/shopcart'))
-//     })
-// }
-
 const usercenter = resolve => {
     require.ensure(['./views/usercenter'], () => {
         resolve(require('./views/usercenter'))
     })
 }
-
-// 商品列表
-// const category = resolve => {
-//     require.ensure(['./views/category'], () => {
-//         resolve(require('./views/category'))
-//     })
-// }
 
 const detail = resolve => {
     require.ensure(['./views/detail'], () => {
@@ -53,30 +34,11 @@ const order = resolve => {
     })
 }
 
-// const orderThird = resolve => {
-//     require.ensure(['./views/user/order_third'], () => {
-//         resolve(require('./views/user/order_third'))
-//     })
-// }
-//
-// const userinfo = resolve => {
-//     require.ensure(['./views/user/userinfo'], () => {
-//         resolve(require('./views/user/userinfo'))
-//     })
-// }
-
 const payProduct = resolve => {
     require.ensure(['./views/pay/pay'], () => {
         resolve(require('./views/pay/pay'))
     })
 }
-
-// 订单办理押金
-// const orderDeposit = resolve => {
-//     require.ensure(['./views/user/order_deposit'], () => {
-//         resolve(require('./views/user/order_deposit'))
-//     })
-// }
 
 // 转换为订单详情
 const orderQrcode = resolve => {
@@ -84,13 +46,6 @@ const orderQrcode = resolve => {
         resolve(require('./views/user/order_qrcode'))
     })
 }
-
-// 二维码信息
-// const orderQrcodeInfo = resolve => {
-//     require.ensure(['./views/user/qrcode_info'], () => {
-//         resolve(require('./views/user/qrcode_info'))
-//     })
-// }
 
 const payDeposit = resolve => {
     require.ensure(['./views/pay/pay_deposit'], () => {
@@ -107,23 +62,9 @@ var routers = new VueRouter({
             component: index
         },
         {
-            path: '/search',
-            component: search
-        },
-        // {
-        //     path: '/shopcart',
-        //     component: shopcart,
-        //     meta: { requiresAuth: true }
-        // },
-        {
             path: '/usercenter',
-            component: usercenter,
-            meta: { requiresAuth: true }
+            component: usercenter
         },
-        // {
-        //     path: '/category',
-        //     component: category
-        // },
         {
             path: '/detail',
             component: detail
@@ -134,53 +75,29 @@ var routers = new VueRouter({
         },
         {
             path: '/order',
-            component: order,
-            meta: { requiresAuth: true }
+            component: order
         },
-        // {
-        //     path: '/order_third',
-        //     component: orderThird,
-        //     meta: { requiresAuth: true }
-        // },
-        // {
-        //     path: '/userinfo',
-        //     component: userinfo,
-        //     meta: { requiresAuth: true }
-        // },
         {
             path: '/pay',
-            component: payProduct,
-            meta: { requiresAuth: true }
+            component: payProduct
         },
-        // {
-        //     path: '/order_deposit',
-        //     component: orderDeposit,
-        //     meta: { requiresAuth: true }
-        // },
         {
             path: '/order_qrcode',
-            component: orderQrcode,
-            meta: { requiresAuth: true }
+            component: orderQrcode
         },
-        // {
-        //     path: '/qrcode_info',
-        //     component: orderQrcodeInfo,
-        //     meta: { requiresAuth: true }
-        // },
         {
             path: '/payDeposit',
-            component: payDeposit,
-            meta: { requiresAuth: true }
+            component: payDeposit
         }
     ]
 })
 
 routers.beforeEach((to, from, next) => {
     /* 检测id没有的话就跳转到首页 */
-    if (!cookie.hasCookie('jsfyopenid') || !cookie.hasCookie('bid')) {
-        window.location.href = 'http://v.xujiangyu.com?bid=901'
-        return
-    }
+    // if (!cookie.hasCookie('jsfyopenid') || !cookie.hasCookie('bid')) {
+    //     window.location.href = 'http://v.xujiangyu.com?bid=901'
+    //     return
+    // }
 
     next();
 })

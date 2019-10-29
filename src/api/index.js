@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as cookie from '../lib/cookie'
 
-const bid = cookie.getCookie('bid');
+const bid = cookie.getCookie('bid') || 901;
 
 function getOpenId () {
   const idStr = cookie.getCookie('jsfyopenid');
