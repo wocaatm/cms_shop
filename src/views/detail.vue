@@ -159,7 +159,7 @@
 
               if (!tel && !bindedTel) {
                 MessageBox.alert('请先绑定手机号');
-                t.$router.push('/login');
+                t.$router.push('/bindtel');
                 return
               }
 
