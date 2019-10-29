@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import * as cookie from './lib/cookie'
+import * as cookie from './lib/cookie'
 
 Vue.use(VueRouter)
 
@@ -94,10 +94,10 @@ var routers = new VueRouter({
 
 routers.beforeEach((to, from, next) => {
     /* 检测id没有的话就跳转到首页 */
-    // if (!cookie.hasCookie('jsfyopenid') || !cookie.hasCookie('bid')) {
-    //     window.location.href = 'http://v.xujiangyu.com?bid=901'
-    //     return
-    // }
+    if (!cookie.hasCookie('jsfyopenid') || !cookie.hasCookie('bid')) {
+        window.location.href = 'http://v.xujiangyu.com?bid=901'
+        return
+    }
 
     next();
 })
