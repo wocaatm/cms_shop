@@ -205,7 +205,7 @@
                                    this.orders.splice(index, 1)
                                 } else {
                                     Toast({
-                                        message: response.data.errorMsg,
+                                        message: response.data.msg,
                                         position: 'middle',
                                         duration: 1500
                                     })

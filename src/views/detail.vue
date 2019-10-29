@@ -172,7 +172,7 @@
                   if (response.data.success) {
                     t.$router.push({ path: '/pay', query: { orderId: response.data.data.ordernumber } })
                   } else {
-                    MessageBox.alert(response.data.errorMsg)
+                    MessageBox.alert(response.data.msg)
                   }
                 })
             },

@@ -64,7 +64,7 @@
                             window.location.href = payUrl + '?jsParamters=' + encodeURI(JSON.stringify(response.data.jsParamters)) + '&successUrl=' + depostRedirectUrlSuccess + '&failUrl=' + depostRedirectUrlFail
                         } else {
                             Toast({
-                                message: response.data.errorMsg,
+                                message: response.data.msg,
                                 position: 'middle',
                                 duration: 1500
                             })
