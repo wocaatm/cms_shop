@@ -5,7 +5,7 @@ export const ALREADY_SEND_QRCODE = '短信已发送,请注意查收!'
 
 export const QRCODE_EMPTY = '验证码不能为空!'
 
-export const LOGIN_SUCCESS = '登录成功'
+export const LOGIN_SUCCESS = '绑定成功'
 
 //产品数量不是正整数
 export const NOT_POSITIVE_NUMBER = '输入的数量不是正整数!'

@@ -26,6 +26,8 @@ export const INIT_LOGING_USER = 'INIT_LOGING_USER'
 
 export const USER_LOGOUT_ACTION = 'USER_LOGOUT_ACTION'
 
+export const BIND_TEL_FLAG = 'BIND_TEL_FLAG'
+
 //订单列表
 export const INIT_ORDER_LIST = 'INIT_ORDER_LIST'
 

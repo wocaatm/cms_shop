@@ -1,4 +1,4 @@
-import { INIT_LOGING_USER, USER_LOGOUT_ACTION } from '../types'
+import { INIT_LOGING_USER, USER_LOGOUT_ACTION, BIND_TEL_FLAG } from '../types'
 import * as cookie from '../../lib/cookie'
 
 function getSkiTag () {
@@ -43,6 +43,9 @@ const mutations = {
     [USER_LOGOUT_ACTION] (state) {
         cookie.delCookie(getSkiTag())
         state.userinfo = ''
+    },
+    [BIND_TEL_FLAG] (state) {
+      state.userinfo.bindedTel = true;
     }
 }
 

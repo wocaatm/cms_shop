@@ -98,6 +98,7 @@
                     })
             },
             bind () {
+                const t = this;
                 if (!checkTelephone(this.telephone)) {
                     Toast({
                         message: tips.ERROR_NUMBER,
@@ -127,9 +128,12 @@
                                 position: 'middle',
                                 duration: 1500
                             })
+                            // 设置绑定的cookie
                             cookie.setCookie('bindedTel', true);
+                            // 修改store
+                            t.$store.commit('');
                             setTimeout(() => {
-                              window.location.href = '/usercenter';
+                                t.$router.push('/usercenter');
                             }, 1500)
                         } else {
                             Toast({
