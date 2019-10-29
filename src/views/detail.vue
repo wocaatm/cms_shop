@@ -158,7 +158,11 @@
               let id = ''
 
               if (!tel && !bindedTel) {
-                MessageBox.alert('请先绑定手机号');
+                Toast({
+                  message: '请先登录',
+                  position: 'middle',
+                  duration: 1500
+                })
                 t.$router.push('/bindtel');
                 return
               }

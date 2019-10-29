@@ -44,8 +44,8 @@ const mutations = {
         cookie.delCookie(getSkiTag())
         state.userinfo = ''
     },
-    [BIND_TEL_FLAG] (state) {
-      state.userinfo.bindedTel = true;
+    [BIND_TEL_FLAG] (state, tel) {
+      state.userinfo.bindedTel = tel;
     }
 }
 

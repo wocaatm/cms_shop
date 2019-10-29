@@ -131,7 +131,7 @@
                             // 设置绑定的cookie
                             cookie.setCookie('bindedTel', this.telephone);
                             // 修改store
-                            t.$store.commit('');
+                            t.$store.commit('BIND_TEL_FLAG', this.telephone);
                             setTimeout(() => {
                                 t.$router.push('/usercenter');
                             }, 1500)
