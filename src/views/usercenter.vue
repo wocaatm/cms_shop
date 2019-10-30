@@ -31,7 +31,7 @@
                     </router-link>
                 </li>
                 <li class="order-tab-item">
-                    <router-link class='order-tab-link' :to="{path: '/order', query: {tab: 4}}">
+                    <router-link class='order-tab-link' :to="{path: '/order', query: {tab: 3}}">
                         <div class="tab-content">
                             <img class='tab-thumb bigger inline' src="../assets/images/finish.png" alt="">
                             <p>已消费</p>
@@ -39,7 +39,7 @@
                     </router-link>
                 </li>
                 <li class="order-tab-item">
-                    <router-link class='order-tab-link' :to="{path: '/order', query: {tab: 5}}">
+                    <router-link class='order-tab-link' :to="{path: '/order', query: {tab: 4}}">
                         <div class="tab-content">
                             <img class='tab-thumb inline' src="../assets/images/pay_back.png" alt="">
                             <p>退款</p>

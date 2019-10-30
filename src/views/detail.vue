@@ -67,7 +67,7 @@
             </div>
             <h3 class="detail-content-title">产品内容</h3>
             <div class="wangEditor-container">
-                <div class="wangEditor-txt" v-html='detail.memo'></div>
+                <div class="wangEditor-txt" style="margin-top: 15px" v-html='detail.memo'></div>
             </div>
         </div>
         <div class="buy-product-info">
