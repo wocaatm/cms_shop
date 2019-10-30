@@ -22,12 +22,12 @@
                     </p>
                 </div>
                 <div class="qrcode-show-container">
-                    <h3 class="qrcode-tip">产品对应的二维码</h3>
                     <div class="qrcode-url-container">
                         <div class="transition-container" v-if="qrcodeUrl">
                           <img :src="qrcodeUrl" alt="" width="100%" height="100%">
                         </div>
                     </div>
+                    <div class="qrcode-tip-line" v-if='qrcodeInfo.qrcodeDescribe'>长按识别二维码办理押金</div>
                 </div>
             </div>
         </div>
@@ -143,9 +143,10 @@
             margin-top 20px
             text-align center
             font-size 14px
-            .qrcode-tip
-                font-weight 500
+            .qrcode-tip-line
+                margin-top 10px
                 font-size 14px
+                color #333
             .qrcode-url-container
                 display flex
                 justify-content center
