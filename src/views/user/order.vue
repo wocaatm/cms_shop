@@ -107,7 +107,7 @@
             gotoDetail (order) {
                 const { state, ordernumber } = order;
                 if (state === 1) return
-                this.$router.push({ path: '/order_qrcode', query: { orderId: order.ordernumber } })
+                this.$router.push({ path: '/order_qrcode', query: { orderId: ordernumber } })
             },
             changeType () {
                 const type = {
