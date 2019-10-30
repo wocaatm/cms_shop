@@ -13,7 +13,7 @@
         </ul>
         <ul class="order-list-container" v-if='!loaded || orders.length'>
               <li class="order-list-item" v-for='(order, index) in orders' :key="index">
-                <router-link :to="{ path: '/order_qrcode', query: { orderId: order.ordernumber}}">
+                <div @click='gotoDetail(order)'>
                   <div class="order-item-header">
                     <div class="header-left">
                       <p class="order-id">订单号：{{order.ordernumber}}</p>
@@ -41,7 +41,7 @@
                       </li>
                     </ul>
                   </div>
-                </router-link>
+                </div>
                 <div class="order-item-opration clearfix">
                   <span class="all-money fl">商品总额：<span class="price">￥{{order.total}}</span></span>
                   <div class="opration-btn-container fr">
@@ -104,6 +104,11 @@
             this.initData()
         },
         methods: {
+            gotoDetail (order) {
+                const { state, ordernumber } = order;
+                if (state === 1) return
+                this.$router.push({ path: '/order_qrcode', query: { orderId: order.ordernumber } })
+            },
             changeType () {
                 const type = {
                     tab: this.tab

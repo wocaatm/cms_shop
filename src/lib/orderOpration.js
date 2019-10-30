@@ -21,12 +21,6 @@ const opration = {
             text: '申请退款',
             router: '',
             class: ''
-        },
-        {
-            opration: 3,
-            text: '办理押金',
-            a: 'http://www.baidu.com',
-            class: ''
         }
     ],
     "3": [
