@@ -12,7 +12,7 @@ const jsfyopenid = getOpenId();
 
 function config(query) {
     const config = {
-        baseURL: 'http://v.xujiangyu.com/'
+        baseURL: 'http://v.esnow.net.cn/'
     }
     
     if (query) {
