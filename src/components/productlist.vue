@@ -78,7 +78,7 @@
             overflow hidden
             .info-thumb
               width 100%
-              height 180px
+              min-height 180px;
           .title-part
               position absolute
               left 0
